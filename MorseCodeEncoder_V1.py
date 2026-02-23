@@ -2,7 +2,7 @@ from machine import Pin, PWM
 from time import sleep
 
 # Morse code dictionary, s is for dots and l is for the dashes
-MorseCodes = {
+MorseCode = {
     ' ': '',
     'a': 'sl',
     'b': 'lsss',
@@ -42,5 +42,80 @@ MorseCodes = {
     '0': 'lllll'}
 
 # The LEDs that will morse code out the message
-shortled = Pin(11, Pin.OUT)
-longled = Pin(12, Pin.OUT)
+dot = Pin(14, Pin.OUT)
+dash = Pin(15, Pin.OUT)
+buzzer = PWM(Pin(16))
+
+slow = 0.6	# Represents the delay associated with the dash
+fast = 0.3	#Represents dot delay
+pitch = 1000
+volume = 4000
+buzzer.freq(pitch) #Higher value means higher pitch (sharpness of buzzer sound)
+
+dot.low()
+dash.low()
+
+def letterlookup(stringval):
+    for k in MorseCode:
+        if MorseCode[k] == stringval:
+            return k
+    return " "
+
+def blinkletter(letter):
+    
+    if letter != "":
+        currentletter = MorseCode[letter]
+    if letter == " ":
+        dot.high()
+        dash.high()
+        sleep(0.2)
+        dot.low()
+        dash.low()
+        sleep(.2)
+        return
+    
+    print(letter+" : "+currentletter)
+    for c in currentletter:
+        if (c == "l"):
+            blinkspeed = slow
+            dash.high()
+            buzzer.duty_u16(volume)
+            sleep(blinkspeed)
+            dash.low()
+            buzzer.duty_u16(0)
+        if (c == "s"):
+            blinkspeed = fast
+            dot.high()
+            buzzer.duty_u16(volume)
+            sleep(blinkspeed)
+            dot.low()
+            buzzer.duty_u16(0)
+        
+        sleep(.15)
+            
+    sleep(0.6)
+
+def playmessage(message):
+    for c in message:
+        blinkletter(str.lower(c))
+
+
+
+while True:
+    message = input("Type message to be encoded: ")
+    playmessage(message)
+    sleep(0.8)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
