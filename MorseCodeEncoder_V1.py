@@ -46,8 +46,8 @@ dot = Pin(14, Pin.OUT)
 dash = Pin(15, Pin.OUT)
 buzzer = PWM(Pin(16))
 
-slow = 0.6	# Represents the delay associated with the dash
-fast = 0.3	#Represents dot delay
+slow = 0.6	# Dash
+fast = 0.3	# Dot
 pitch = 1000
 volume = 4000
 buzzer.freq(pitch) #Higher value means higher pitch (sharpness of buzzer sound)
@@ -71,7 +71,7 @@ def blinkletter(letter):
         sleep(0.2)
         dot.low()
         dash.low()
-        sleep(.2)
+        sleep(.25)
         return
     
     print(letter+" : "+currentletter)
@@ -93,7 +93,7 @@ def blinkletter(letter):
         
         sleep(.15)
             
-    sleep(0.6)
+    sleep(0.3)
 
 def playmessage(message):
     for c in message:
@@ -102,9 +102,9 @@ def playmessage(message):
 
 
 while True:
-    message = input("Type message to be encoded: ")
+    message = input("Type message: ")
     playmessage(message)
-    sleep(0.8)
+    sleep(0.5)
 
 
 
